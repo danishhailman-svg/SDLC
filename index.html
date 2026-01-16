@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SDLC 3-2-1 Learning Innovation</title>
+
+<style>
+body{
+  font-family: Arial, sans-serif;
+  background:#f4f6f8;
+  margin:0;
+  padding:20px;
+}
+
+.page{
+  display:none;
+}
+
+.page.active{
+  display:block;
+}
+
+h1,h2{
+  text-align:center;
+}
+
+button{
+  padding:10px 20px;
+  font-size:16px;
+  margin-top:20px;
+  cursor:pointer;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  background:#fff;
+  margin-top:20px;
+}
+
+th,td{
+  border:1px solid #ccc;
+  padding:10px;
+  vertical-align:top;
+}
+
+th{
+  background:#e3f2fd;
+}
+
+.instruction{
+  background:#fff3cd;
+  padding:20px;
+  border-left:5px solid #ffc107;
+}
+
+.drag-container{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin:20px 0;
+}
+
+.drag-item{
+  background:#90caf9;
+  padding:8px 12px;
+  border-radius:5px;
+  cursor:pointer;
+}
+
+.drop-zone{
+  min-height:100px;
+  border:2px dashed #aaa;
+  padding:10px;
+  background:#fff;
+}
+</style>
+</head>
+
+<body>
+
+<!-- PAGE 1 -->
+<div class="page active" id="page1">
+  <h1>SDLC Learning Activity</h1>
+
+  <div class="instruction">
+    <h2>📌 3-2-1 Memorisation Method</h2>
+    <ol>
+      <li><b>Read</b> the keywords with their SDLC phase <b>3 times</b>.</li>
+      <li><b>Say</b> the keywords aloud <b>2 times</b>.</li>
+      <li><b>Write</b> the keywords <b>1 time</b> from memory.</li>
+    </ol>
+    <p><b>Repeat this method THREE (3) times</b> before continuing.</p>
+  </div>
+
+  <center>
+    <button onclick="nextPage(2)">Next ▶</button>
+  </center>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page" id="page2">
+  <h2>SDLC Phases & Keywords</h2>
+  <p style="text-align:center;">Apply the <b>3-2-1 method</b> using the table below.</p>
+
+  <table>
+    <tr>
+      <th>Planning</th>
+      <th>Analysis</th>
+      <th>Design</th>
+      <th>Implementation</th>
+      <th>Support & Security</th>
+    </tr>
+    <tr>
+      <td>
+        Review project requests<br>
+        Prioritise project requests<br>
+        Allocate resources<br>
+        Form project team
+      </td>
+      <td>
+        Study current system<br>
+        Determine user requirements<br>
+        Feasibility study<br>
+        Recommend solution
+      </td>
+      <td>
+        Interface design<br>
+        Flowchart<br>
+        Pseudocode<br>
+        Prototype
+      </td>
+      <td>
+        Develop programs<br>
+        Testing<br>
+        Train users<br>
+        System conversion
+      </td>
+      <td>
+        Maintenance<br>
+        Monitor system performance<br>
+        Security assessment
+      </td>
+    </tr>
+  </table>
+
+  <center>
+    <button onclick="nextPage(3)">Next ▶</button>
+  </center>
+</div>
+
+<!-- PAGE 3 -->
+<div class="page" id="page3">
+  <h2>🧠 Classification Activity</h2>
+  <p style="text-align:center;">
+    <b>Tap</b> a keyword, then <b>tap</b> the correct SDLC phase.
+  </p>
+
+  <div class="drag-container" id="keywords">
+    <div class="drag-item">Testing</div>
+    <div class="drag-item">Allocate resources</div>
+    <div class="drag-item">Prototype</div>
+    <div class="drag-item">Study current system</div>
+    <div class="drag-item">Maintenance</div>
+    <div class="drag-item">Interface design</div>
+    <div class="drag-item">Feasibility study</div>
+    <div class="drag-item">Train users</div>
+    <div class="drag-item">Monitor system performance</div>
+    <div class="drag-item">Recommend solution</div>
+    <div class="drag-item">Form project team</div>
+    <div class="drag-item">Flowchart</div>
+    <div class="drag-item">Pseudocode</div>
+    <div class="drag-item">Develop programs</div>
+    <div class="drag-item">Security assessment</div>
+    <div class="drag-item">System conversion</div>
+    <div class="drag-item">Review project requests</div>
+    <div class="drag-item">Prioritise project requests</div>
+    <div class="drag-item">Determine user requirements</div>
+  </div>
+
+  <table>
+    <tr>
+      <th class="drop-zone">Planning</th>
+      <th class="drop-zone">Analysis</th>
+      <th class="drop-zone">Design</th>
+      <th class="drop-zone">Implementation</th>
+      <th class="drop-zone">Support & Security</th>
+    </tr>
+  </table>
+</div>
+
+<script>
+function nextPage(page){
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page'+page).classList.add('active');
+}
+
+let selectedItem = null;
+
+document.querySelectorAll('.drag-item').forEach(item=>{
+  item.addEventListener('click',()=>{
+    document.querySelectorAll('.drag-item').forEach(i=>i.style.background='#90caf9');
+    selectedItem = item;
+    item.style.background='#ffcc80';
+  });
+});
+
+document.querySelectorAll('.drop-zone').forEach(zone=>{
+  zone.addEventListener('click',()=>{
+    if(selectedItem){
+      zone.appendChild(selectedItem);
+      selectedItem.style.background='#a5d6a7';
+      selectedItem = null;
+    }
+  });
+});
+</script>
+
+</body>
+</html>
