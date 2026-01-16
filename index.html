@@ -12,22 +12,15 @@ body{
   padding:20px;
 }
 
-.page{
-  display:none;
-}
+.page{ display:none; }
+.page.active{ display:block; }
 
-.page.active{
-  display:block;
-}
-
-h1,h2{
-  text-align:center;
-}
+h1,h2{ text-align:center; }
 
 button{
   padding:10px 20px;
   font-size:16px;
-  margin-top:20px;
+  margin:10px;
   cursor:pointer;
 }
 
@@ -44,9 +37,7 @@ th,td{
   vertical-align:top;
 }
 
-th{
-  background:#e3f2fd;
-}
+th{ background:#e3f2fd; }
 
 .instruction{
   background:#fff3cd;
@@ -69,11 +60,15 @@ th{
 }
 
 .drop-zone{
-  min-height:100px;
+  min-height:120px;
   border:2px dashed #aaa;
   padding:10px;
   background:#fff;
 }
+
+.correct{ background:#c8e6c9 !important; }
+.wrong{ background:#ffcdd2 !important; }
+.selected{ background:#ffcc80 !important; }
 </style>
 </head>
 
@@ -86,11 +81,11 @@ th{
   <div class="instruction">
     <h2>📌 3-2-1 Memorisation Method</h2>
     <ol>
-      <li><b>Read</b> the keywords with their SDLC phase <b>3 times</b>.</li>
-      <li><b>Say</b> the keywords aloud <b>2 times</b>.</li>
-      <li><b>Write</b> the keywords <b>1 time</b> from memory.</li>
+      <li>Read the keywords <b>3 times</b></li>
+      <li>Say the keywords <b>2 times</b></li>
+      <li>Write the keywords <b>1 time</b></li>
     </ol>
-    <p><b>Repeat this method THREE (3) times</b> before continuing.</p>
+    <p><b>Repeat this method THREE (3) times</b>.</p>
   </div>
 
   <center>
@@ -145,75 +140,116 @@ th{
   </table>
 
   <center>
-    <button onclick="nextPage(3)">Next ▶</button>
+    <button onclick="nextPage(3)">Start Activity ▶</button>
   </center>
 </div>
 
 <!-- PAGE 3 -->
 <div class="page" id="page3">
   <h2>🧠 Classification Activity</h2>
-  <p style="text-align:center;">
-    <b>Tap</b> a keyword, then <b>tap</b> the correct SDLC phase.
-  </p>
+  <p style="text-align:center;">Tap a keyword, then tap the correct SDLC phase.</p>
 
-  <div class="drag-container" id="keywords">
-    <div class="drag-item">Testing</div>
-    <div class="drag-item">Allocate resources</div>
-    <div class="drag-item">Prototype</div>
-    <div class="drag-item">Study current system</div>
-    <div class="drag-item">Maintenance</div>
-    <div class="drag-item">Interface design</div>
-    <div class="drag-item">Feasibility study</div>
-    <div class="drag-item">Train users</div>
-    <div class="drag-item">Monitor system performance</div>
-    <div class="drag-item">Recommend solution</div>
-    <div class="drag-item">Form project team</div>
-    <div class="drag-item">Flowchart</div>
-    <div class="drag-item">Pseudocode</div>
-    <div class="drag-item">Develop programs</div>
-    <div class="drag-item">Security assessment</div>
-    <div class="drag-item">System conversion</div>
-    <div class="drag-item">Review project requests</div>
-    <div class="drag-item">Prioritise project requests</div>
-    <div class="drag-item">Determine user requirements</div>
-  </div>
+  <div class="drag-container" id="keywords"></div>
 
   <table>
     <tr>
-      <th class="drop-zone">Planning</th>
-      <th class="drop-zone">Analysis</th>
-      <th class="drop-zone">Design</th>
-      <th class="drop-zone">Implementation</th>
-      <th class="drop-zone">Support & Security</th>
+      <th class="drop-zone" data-phase="Planning">Planning</th>
+      <th class="drop-zone" data-phase="Analysis">Analysis</th>
+      <th class="drop-zone" data-phase="Design">Design</th>
+      <th class="drop-zone" data-phase="Implementation">Implementation</th>
+      <th class="drop-zone" data-phase="Support">Support & Security</th>
     </tr>
   </table>
+
+  <center>
+    <button onclick="checkAnswers()">Check Answer</button>
+    <button onclick="repeatLearning()">Repeat Learning 🔁</button>
+  </center>
 </div>
 
 <script>
-function nextPage(page){
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page'+page).classList.add('active');
-}
+const answers = {
+  "Review project requests":"Planning",
+  "Prioritise project requests":"Planning",
+  "Allocate resources":"Planning",
+  "Form project team":"Planning",
+
+  "Study current system":"Analysis",
+  "Determine user requirements":"Analysis",
+  "Feasibility study":"Analysis",
+  "Recommend solution":"Analysis",
+
+  "Interface design":"Design",
+  "Flowchart":"Design",
+  "Pseudocode":"Design",
+  "Prototype":"Design",
+
+  "Develop programs":"Implementation",
+  "Testing":"Implementation",
+  "Train users":"Implementation",
+  "System conversion":"Implementation",
+
+  "Maintenance":"Support",
+  "Monitor system performance":"Support",
+  "Security assessment":"Support"
+};
 
 let selectedItem = null;
 
-document.querySelectorAll('.drag-item').forEach(item=>{
-  item.addEventListener('click',()=>{
-    document.querySelectorAll('.drag-item').forEach(i=>i.style.background='#90caf9');
-    selectedItem = item;
-    item.style.background='#ffcc80';
-  });
-});
+function nextPage(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page'+page).classList.add('active');
+}
+
+function loadKeywords(){
+  const container = document.getElementById('keywords');
+  container.innerHTML = "";
+  Object.keys(answers)
+    .sort(()=>Math.random()-0.5)
+    .forEach(text=>{
+      const div = document.createElement("div");
+      div.className = "drag-item";
+      div.textContent = text;
+      div.onclick = ()=>selectItem(div);
+      container.appendChild(div);
+    });
+}
+
+function selectItem(item){
+  document.querySelectorAll('.drag-item').forEach(i=>i.classList.remove('selected'));
+  selectedItem = item;
+  item.classList.add('selected');
+}
 
 document.querySelectorAll('.drop-zone').forEach(zone=>{
   zone.addEventListener('click',()=>{
     if(selectedItem){
       zone.appendChild(selectedItem);
-      selectedItem.style.background='#a5d6a7';
+      selectedItem.classList.remove('selected');
       selectedItem = null;
     }
   });
 });
+
+function checkAnswers(){
+  document.querySelectorAll('.drag-item').forEach(item=>{
+    const parent = item.parentElement.dataset.phase;
+    if(parent === answers[item.textContent]){
+      item.classList.add('correct');
+      item.classList.remove('wrong');
+    }else{
+      item.classList.add('wrong');
+      item.classList.remove('correct');
+    }
+  });
+}
+
+function repeatLearning(){
+  loadKeywords();
+  nextPage(2);
+}
+
+loadKeywords();
 </script>
 
 </body>
